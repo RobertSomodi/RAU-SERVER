@@ -31,10 +31,8 @@ dotenv.load({ path: '.env.example' });
 /**
  * Controllers (route handlers).
  */
-const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
-const contactController = require('./controllers/contact');
 
 /**
  * API keys and Passport configuration.
@@ -64,7 +62,7 @@ mongoose.connection.on('error', (err) => {
  */
 app.set('host', process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0');
 app.set('port', process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080);
-app.use(cors())
+app.use(cors());
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(sass({
@@ -126,7 +124,6 @@ app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawes
 /**
  * Primary app routes.
  */
-app.get('/', homeController.index);
 // app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 // app.get('/logout', userController.logout);

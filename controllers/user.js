@@ -2,8 +2,9 @@ const { promisify } = require('util');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
-const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+
 const randomBytesAsync = promisify(crypto.randomBytes);
 
 /**
@@ -11,13 +12,12 @@ const randomBytesAsync = promisify(crypto.randomBytes);
  * Sign in using email and password.
  */
 exports.postLogin = (req, res, next) => {
- 
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password cannot be blank').notEmpty();
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
   const errors = req.validationErrors();
   if (errors) {
-   return res.json(errors);
+    return res.json(errors);
   }
 
   passport.authenticate('local', (err, user, info) => {
@@ -25,26 +25,24 @@ exports.postLogin = (req, res, next) => {
     if (!user) {
       return res.json(info);
     }
-    else{
-      req.logIn(user, (err) => {
-        
-        if (err) { return next(err); }
-        const token = jwt.sign(user.toJSON(), 'Some secret');
-        const responseJSON = {
-          id: user._id,
-          email: user.email,
-          jwt: token,
-          role: user.role
+
+    req.logIn(user, (err) => {
+      if (err) { return next(err); }
+      const token = jwt.sign(user.toJSON(), 'Some secret');
+      const responseJSON = {
+        id: user._id,
+        email: user.email,
+        jwt: token,
+        role: user.role
+      };
+      req.session.save((err) => {
+        if (err) {
+          return next(err);
         }
-        req.session.save((err) => {
-          if(err) {
-            return next(err);
-          }
-          res.type('json');
-          return res.send(responseJSON);
-        });
+        res.type('json');
+        return res.send(responseJSON);
       });
-    }
+    });
   })(req, res, next);
 };
 
