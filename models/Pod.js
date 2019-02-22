@@ -9,6 +9,6 @@ const podSchema = new mongoose.Schema({
   members: [mongoose.Schema.Types.ObjectId]
 }, { timestamps: true });
 
-const Pod = mongoose.model('Group', podSchema);
-
-module.exports = Pod;
+const Pod = mongoose.model('Pod', podSchema);
+module.exports.schema = podSchema;
+module.exports.model = Pod;

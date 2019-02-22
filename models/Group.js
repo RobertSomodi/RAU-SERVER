@@ -6,7 +6,7 @@ const groupSchema = new mongoose.Schema({
   description: String,
   color: { type: String, unique: true, required: true },
   icon: { type: String, required: true },
-  children: [Pod],
+  children: [Pod.schema],
   parent: mongoose.Schema.Types.ObjectId,
   members: [mongoose.Schema.Types.ObjectId]
 

@@ -33,7 +33,7 @@ dotenv.load({ path: '.env.example' });
  */
 const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
-
+const groupController = require('./controllers/group');
 /**
  * API keys and Passport configuration.
  */
@@ -139,7 +139,12 @@ app.post('/signup', userController.postSignup);
 // app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 // app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 // app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
-
+app.post('/groups/add', groupController.postAddGroup);
+app.post('/groups/update', groupController.postUpdateGroup);
+app.post('/groups/update/members', groupController.postUpdateGroupMembers);
+app.post('/groups/update/children', groupController.postUpdateGroupChildren);
+app.get('/groups/get/id', groupController.getGroupById);
+app.get('/groups/get/all', groupController.getAllGroups);
 /**
  * API examples routes.
  */
